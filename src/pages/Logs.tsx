@@ -1,6 +1,6 @@
-import {useEffect, useState} from 'react'
-import {Filters} from "../components/Filters.tsx";
-import {useSearchParams} from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { Filters } from "../components/Filters.tsx";
+import { useSearchParams } from "react-router-dom";
 
 export interface FiltersInterface {
     logEntryIdFilter: string | null;
@@ -36,15 +36,14 @@ const emptyFilters: FiltersInterface = {
     ordering: null,
 };
 
-
 export function Logs() {
-    const [filters, setFilters] = useState<FiltersInterface>(emptyFilters)
+    const [filters, setFilters] = useState<FiltersInterface>(emptyFilters);
     const [searchParams, setSearchParams] = useSearchParams();
+    const prevParamsRef = useRef<string>("");
 
     function getFiltersFromURL(): FiltersInterface {
-        console.log("getFiltersFromURL");
-        console.log(searchParams)
         return {
+            limit: searchParams.get("limit") ? Number(searchParams.get("limit")) : null,
             logEntryIdFilter: searchParams.get("logEntryId") || null,
             severityFilter: searchParams.get("severity") || null,
             messageFilter: searchParams.get("message") || null,
@@ -56,35 +55,34 @@ export function Logs() {
             requestKeyFilter: searchParams.get("requestKey") || null,
             startDateFilter: searchParams.get("startDate") || null,
             endDateFilter: searchParams.get("endDate") || null,
-            limit: searchParams.get("limit") ? Number(searchParams.get("limit")) : null,
             page: searchParams.get("page") ? Number(searchParams.get("page")) : null,
             ordering: searchParams.get("ordering") || null,
         };
     }
 
     useEffect(() => {
-        setFilters(getFiltersFromURL)
+        setFilters(getFiltersFromURL());
     }, []);
 
     useEffect(() => {
-        const newParams = new URLSearchParams(searchParams);
+        const newParams = new URLSearchParams();
         Object.entries(filters).forEach(([key, value]) => {
-            if (value !== null && value !== undefined) {
+            if (value !== null && value !== undefined && value !== "") {
                 newParams.set(key, String(value));
             }
         });
 
-        console.log(filters);
-
-        setSearchParams(newParams);
-    }, [filters, searchParams, setSearchParams]);
+        const newParamsString = newParams.toString();
+        if (prevParamsRef.current !== newParamsString) {
+            prevParamsRef.current = newParamsString;
+            setSearchParams(newParams);
+        }
+    }, [filters, setSearchParams]);
 
     return (
         <>
-            {/* <Filters /> */}
-            <Filters filters={filters} setFilters={setFilters}/>
-a
+            <Filters filters={filters} setFilters={setFilters} />
             {/* <LogsTable logs={logs} /> they will get the logs when the logs reload */}
         </>
-    )
+    );
 }
