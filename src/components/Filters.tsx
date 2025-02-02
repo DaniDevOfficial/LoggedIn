@@ -1,16 +1,19 @@
-import { Flex, Input, InputGroup, NumberInput, NumberInputField, Select } from "@chakra-ui/react";
+import {Flex, Input, InputGroup, NumberInput, NumberInputField, Select} from "@chakra-ui/react";
 import React from "react";
-import { FiltersInterface } from "../pages/Logs.tsx";
+import {FiltersInterface} from "../pages/Logs.tsx";
 
-export function Filters({ filters, setFilters }: { filters: FiltersInterface, setFilters: React.Dispatch<React.SetStateAction<FiltersInterface>> }) {
+export function Filters({filters, setFilters}: {
+    filters: FiltersInterface,
+    setFilters: React.Dispatch<React.SetStateAction<FiltersInterface>>
+}) {
 
     function updateFilters<K extends keyof FiltersInterface>(filtersType: K, value: FiltersInterface[K] | null) {
-        const newFilters = { ...filters };
+        const newFilters = {...filters};
 
-        // ✅ Remove typeof check (not reliable for null values)
         newFilters[filtersType] = value;
         setFilters(newFilters);
     }
+
 
     return (
         <Flex>
@@ -18,19 +21,27 @@ export function Filters({ filters, setFilters }: { filters: FiltersInterface, se
 
                 <Input
                     placeholder="Message"
+                    value={filters.messageFilter}
                     onChange={(e) => updateFilters("messageFilter", e.target.value || null)}
                 />
 
                 <NumberInput
-                    min={0}
+                    min={1}
                     max={500}
-                    onChange={(valueAsNumber) => updateFilters("limit", Number(valueAsNumber) || null)}
+                    value={typeof filters.limit === "number" ? filters.limit : ""}
+                    onChange={(valueAsString) => {
+                        const numericValue = Number(valueAsString);
+                        updateFilters("limit", (isNaN(numericValue) || numericValue === 0) ? null : numericValue);
+                    }}
                 >
                     <NumberInputField placeholder="Limit" />
                 </NumberInput>
 
+
+
                 <Select
                     placeholder="Select Severity"
+
                     onChange={(e) => updateFilters("severityFilter", e.target.value || null)}
                 >
                     <option value="info">Info</option>
