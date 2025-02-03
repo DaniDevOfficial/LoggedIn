@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
-import { Filters } from "../components/Filters.tsx";
+import { Filters } from "../components/LoggingDisplay/Filters.tsx";
 import { useSearchParams } from "react-router-dom";
+import {LogsList} from "../components/LoggingDisplay/LogsList.tsx";
 
 export interface FiltersInterface {
     logEntryIdFilter: string | null;
@@ -19,6 +20,19 @@ export interface FiltersInterface {
     ordering: string | null;
 }
 
+export interface LogEntry {
+    id: string;
+    message: string | null,
+    severity: string | null,
+    request:string | null,
+    userId: string | null,
+    requestURL: string | null,
+    requestKey: string | null,
+    response: string | null,
+    dateTime: string | null,
+}
+
+
 const emptyFilters: FiltersInterface = {
     logEntryIdFilter: null,
     severityFilter: null,
@@ -35,9 +49,20 @@ const emptyFilters: FiltersInterface = {
     page: null,
     ordering: null,
 };
-
+const testLog: LogEntry = {
+    id: 'test',
+    message: 'Test Message',
+    severity: 'Alert',
+    request: 'someRequestBodyJSON',
+    requestURL: '/api/test POST',
+    response: '200 Success',
+    dateTime: '2025-02-03T16:51:04.592Z',
+    requestKey: null,
+    userId: null,
+}
 export function Logs() {
     const [filters, setFilters] = useState<FiltersInterface>(emptyFilters);
+    const [logs, setLogs] = useState<LogEntry[]>([testLog, testLog, testLog, testLog]);
     const [searchParams, setSearchParams] = useSearchParams();
     const prevParamsRef = useRef<string>("");
 
@@ -82,7 +107,7 @@ export function Logs() {
     return (
         <>
             <Filters filters={filters} setFilters={setFilters} />
-            {/* <LogsTable logs={logs} /> they will get the logs when the logs reload */}
+            <LogsList logEntries={logs} />
         </>
     );
 }

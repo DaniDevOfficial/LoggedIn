@@ -1,6 +1,6 @@
 import {Flex, Input, InputGroup, NumberInput, NumberInputField, Select} from "@chakra-ui/react";
 import React from "react";
-import {FiltersInterface} from "../pages/Logs.tsx";
+import {FiltersInterface} from "../../pages/Logs.tsx";
 
 export function Filters({filters, setFilters}: {
     filters: FiltersInterface,
@@ -21,7 +21,7 @@ export function Filters({filters, setFilters}: {
 
                 <Input
                     placeholder="Message"
-                    value={filters.messageFilter}
+                    value={filters.messageFilter === null ? '' : filters.messageFilter}
                     onChange={(e) => updateFilters("messageFilter", e.target.value || null)}
                 />
 
@@ -41,7 +41,6 @@ export function Filters({filters, setFilters}: {
 
                 <Select
                     placeholder="Select Severity"
-
                     onChange={(e) => updateFilters("severityFilter", e.target.value || null)}
                 >
                     <option value="info">Info</option>
