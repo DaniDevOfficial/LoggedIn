@@ -1,10 +1,11 @@
-import { Box, useColorMode } from "@chakra-ui/react";
-import { LogEntry as LogEntryType } from "../../pages/Logs";
-import { formatDateTime } from "../../utility/dateTime";
-import { useEffect } from "react";
+import {Box, useColorMode} from "@chakra-ui/react";
+import {LogEntry as LogEntryType} from "../../pages/Logs";
+import {formatDateTime} from "../../utility/dateTime";
+import {useEffect} from "react";
+import {PillTag} from "../ui/PillTag.tsx";
 
-export function LogCard({ logEntry }: { logEntry: LogEntryType }) {
-    const { colorMode } = useColorMode();
+export function LogCard({logEntry}: { logEntry: LogEntryType }) {
+    const {colorMode} = useColorMode();
 
     useEffect(() => {
         try {
@@ -16,7 +17,7 @@ export function LogCard({ logEntry }: { logEntry: LogEntryType }) {
             logEntry.dateTime = formatDateTime(logEntry.dateTime);
         }
     }, []);
-    
+
     return (
         <>
             <Box
@@ -26,29 +27,24 @@ export function LogCard({ logEntry }: { logEntry: LogEntryType }) {
                 boxShadow="md"
                 my={4}
             >
+                {logEntry.severity && (
+                    <PillTag content={logEntry.severity}/>
+                )}
+                <PillTag content={'test'} colorScheme={'green'}/>
+                <PillTag content={'test'} colorScheme={'cyan'}/>
+                <PillTag content={'test'} colorScheme={'orange'}/>
+                <PillTag content={'test'} colorScheme={'red'}/>
+                <PillTag content={'test'} colorScheme={'purple'}/>
+                <PillTag content={'test'} colorScheme={'yellow'}/>
+                <PillTag content={'test'} colorScheme={'black'}/>
+
                 <Box>
-                    <Box as="span" fontWeight="bold">Log Entry ID:</Box> {logEntry.id}
-                </Box>
-                <Box>
+
                     <Box as="span" fontWeight="bold">Severity:</Box> {logEntry.severity}
                 </Box>
                 <Box>
+
                     <Box as="span" fontWeight="bold">Message:</Box> {logEntry.message}
-                </Box>
-                <Box>
-                    <Box as="span" fontWeight="bold">Request:</Box> {logEntry.request}
-                </Box>
-                <Box>
-                    <Box as="span" fontWeight="bold">User ID:</Box> {logEntry.userId}
-                </Box>
-                <Box>
-                    <Box as="span" fontWeight="bold">Request URL:</Box> {logEntry.requestURL}
-                </Box>
-                <Box>
-                    <Box as="span" fontWeight="bold">Request Key:</Box> {logEntry.requestKey}
-                </Box>
-                <Box>
-                    <Box as="span" fontWeight="bold">Response:</Box> {logEntry.response}
                 </Box>
                 <Box>
                     <Box as="span" fontWeight="bold">Date Time:</Box> {logEntry.dateTime}
