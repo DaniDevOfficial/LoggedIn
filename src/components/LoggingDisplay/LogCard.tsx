@@ -1,11 +1,23 @@
 import {Box, useColorMode} from "@chakra-ui/react";
 import {LogEntry as LogEntryType} from "../../pages/Logs";
 import {formatDateTime} from "../../utility/dateTime";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {PillTag} from "../ui/PillTag.tsx";
+
+const severityColorMapping: Record<string, string> = {
+    debug: 'blue',
+    info: 'green',
+    notice: 'cyan',
+    warning: 'orange',
+    error: 'red',
+    critical: 'purple',
+    alert: 'yellow',
+    emergency: 'black'
+}
 
 export function LogCard({logEntry}: { logEntry: LogEntryType }) {
     const {colorMode} = useColorMode();
+    const [colorSchemeForSeverity, setColorSchemeForSeverity] = useState<string>('');
 
     useEffect(() => {
         try {
@@ -16,6 +28,11 @@ export function LogCard({logEntry}: { logEntry: LogEntryType }) {
         if (logEntry.dateTime) {
             logEntry.dateTime = formatDateTime(logEntry.dateTime);
         }
+
+        if (logEntry.severity) {
+            setColorSchemeForSeverity(severityColorMapping[logEntry.severity.toLowerCase()] ?? '');
+        }
+
     }, []);
 
     return (
@@ -28,15 +45,9 @@ export function LogCard({logEntry}: { logEntry: LogEntryType }) {
                 my={4}
             >
                 {logEntry.severity && (
-                    <PillTag content={logEntry.severity}/>
+                    <PillTag content={logEntry.severity} colorScheme={colorSchemeForSeverity}/>
                 )}
-                <PillTag content={'test'} colorScheme={'green'}/>
-                <PillTag content={'test'} colorScheme={'cyan'}/>
-                <PillTag content={'test'} colorScheme={'orange'}/>
-                <PillTag content={'test'} colorScheme={'red'}/>
-                <PillTag content={'test'} colorScheme={'purple'}/>
-                <PillTag content={'test'} colorScheme={'yellow'}/>
-                <PillTag content={'test'} colorScheme={'black'}/>
+
 
                 <Box>
 
