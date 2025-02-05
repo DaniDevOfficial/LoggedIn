@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef } from "react";
-import { Filters } from "../components/LoggingDisplay/Filters.tsx";
-import { useSearchParams } from "react-router-dom";
+import {useEffect, useState, useRef} from "react";
+import {Filters} from "../components/LoggingDisplay/Filters.tsx";
+import {useSearchParams} from "react-router-dom";
 import {LogsList} from "../components/LoggingDisplay/LogsList.tsx";
 
 export interface FiltersInterface {
@@ -24,7 +24,7 @@ export interface LogEntry {
     id: string;
     message: string | null,
     severity: string | null,
-    request:string | null,
+    request: string | null,
     userId: string | null,
     requestURL: string | null,
     requestKey: string | null,
@@ -49,20 +49,99 @@ const emptyFilters: FiltersInterface = {
     page: null,
     ordering: null,
 };
-const testLog: LogEntry = {
-    id: 'test',
-    message: 'Test Message',
-    severity: 'Alert',
-    request: 'someRequestBodyJSON',
-    requestURL: '/api/test POST',
-    response: '200 Success',
-    dateTime: '2025-02-03T16:51:04.592Z',
-    requestKey: null,
-    userId: null,
-}
+const testLog: LogEntry[] = [
+    {
+        id: 'test',
+        message: 'Test Message',
+        severity: 'Emergency',
+        request: 'someRequestBodyJSON',
+        requestURL: '/api/test POST',
+        response: '200 Success',
+        dateTime: '2025-02-03T16:51:04.592Z',
+        requestKey: null,
+        userId: null,
+    }, {
+        id: 'test',
+        message: 'Test Message2',
+        severity: 'Alert',
+        request: 'someRequestBodyJSON',
+        requestURL: '/api/test POST',
+        response: '200 Success',
+        dateTime: '2025-02-03T16:51:04.592Z',
+        requestKey: null,
+        userId: null,
+    }, {
+        id: 'test',
+        message: 'Test Message3',
+        severity: 'Info',
+        request: 'someRequestBodyJSON',
+        requestURL: '/api/test POST',
+        response: '200 Success',
+        dateTime: '2025-02-03T16:51:04.592Z',
+        requestKey: null,
+        userId: null,
+    },
+    {
+        id: 'test',
+        message: 'Test Message4',
+        severity: 'Notice',
+        request: 'someRequestBodyJSON',
+        requestURL: '/api/test POST',
+        response: '200 Success',
+        dateTime: '2025-02-03T16:51:04.592Z',
+        requestKey: 'requestKey2132123',
+        userId: null,
+    },
+    {
+        id: 'test',
+        message: 'Test Message4',
+        severity: 'Debug',
+        request: 'someRequestBodyJSON',
+        requestURL: '/api/test POST',
+        response: '200 Success',
+        dateTime: '2025-02-03T16:51:04.592Z',
+        requestKey: 'requestKey2132123',
+        userId: null,
+    },
+    {
+        id: 'test',
+        message: 'Test Message4',
+        severity: 'Warning',
+        request: 'someRequestBodyJSON',
+        requestURL: '/api/test POST',
+        response: '200 Success',
+        dateTime: '2025-02-03T16:51:04.592Z',
+        requestKey: 'requestKey2132123',
+        userId: null,
+    },
+    {
+        id: 'test',
+        message: 'Test Message4',
+        severity: 'Error',
+        request: 'someRequestBodyJSON',
+        requestURL: '/api/test POST',
+        response: '200 Success',
+        dateTime: '2025-02-03T16:51:04.592Z',
+        requestKey: 'requestKey2132123',
+        userId: null,
+    },
+    {
+        id: 'test',
+        message: 'Test Message4',
+        severity: 'Critical',
+        request: 'someRequestBodyJSON',
+        requestURL: '/api/test POST',
+        response: '200 Success',
+        dateTime: '2025-02-03T16:51:04.592Z',
+        requestKey: 'requestKey2132123',
+        userId: null,
+    },
+
+]
+
 export function Logs() {
     const [filters, setFilters] = useState<FiltersInterface>(emptyFilters);
-    const [logs, setLogs] = useState<LogEntry[]>([testLog, testLog, testLog, testLog]);
+    const [logs, setLogs] = useState<LogEntry[]>(testLog);
     const [searchParams, setSearchParams] = useSearchParams();
     const prevParamsRef = useRef<string>("");
 
@@ -106,8 +185,8 @@ export function Logs() {
 
     return (
         <>
-            <Filters filters={filters} setFilters={setFilters} />
-            <LogsList logEntries={logs} />
+            <Filters filters={filters} setFilters={setFilters}/>
+            <LogsList logEntries={logs}/>
         </>
     );
 }

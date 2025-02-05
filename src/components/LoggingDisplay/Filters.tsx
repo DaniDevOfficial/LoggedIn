@@ -43,9 +43,15 @@ export function Filters({filters, setFilters}: {
                     placeholder="Select Severity"
                     onChange={(e) => updateFilters("severityFilter", e.target.value || null)}
                 >
+                    <option value="debug">Debug</option>
                     <option value="info">Info</option>
+                    <option value="notice">Notice</option>
                     <option value="warning">Warning</option>
-                    <option value="error">Error</option>
+                    <option value="error">error</option>
+                    <option value="critical">Critical</option>
+                    <option value="alert">Alert</option>
+                    <option value="emergency">Emergency</option>
+
                 </Select>
             </InputGroup>
         </Flex>
