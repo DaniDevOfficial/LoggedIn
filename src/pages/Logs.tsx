@@ -53,7 +53,7 @@ const emptyFilters: FiltersInterface = {
 };
 const testLog: LogEntry[] = [
     {
-        id: 'test',
+        id: 'test1',
         message: 'Test Message',
         severity: 'Emergency',
         request: 'someRequestBodyJSON',
@@ -63,7 +63,7 @@ const testLog: LogEntry[] = [
         requestKey: null,
         userId: null,
     }, {
-        id: 'test',
+        id: 'test2',
         message: 'Test Message2',
         severity: 'Alert',
         request: 'someRequestBodyJSON',
@@ -73,7 +73,7 @@ const testLog: LogEntry[] = [
         requestKey: null,
         userId: null,
     }, {
-        id: 'test',
+        id: 'tesr3',
         message: 'Test Message3',
         severity: 'Info',
         request: 'someRequestBodyJSON',
@@ -84,7 +84,7 @@ const testLog: LogEntry[] = [
         userId: null,
     },
     {
-        id: 'test',
+        id: 'test4',
         message: 'Test Message4',
         severity: 'Notice',
         request: 'someRequestBodyJSON',
@@ -95,7 +95,7 @@ const testLog: LogEntry[] = [
         userId: null,
     },
     {
-        id: 'test',
+        id: 'test5',
         message: 'Test Message4',
         severity: 'Debug',
         request: 'someRequestBodyJSON',
@@ -106,7 +106,7 @@ const testLog: LogEntry[] = [
         userId: null,
     },
     {
-        id: 'test',
+        id: 'test6',
         message: 'Test Message4',
         severity: 'Warning',
         request: 'someRequestBodyJSON',
@@ -117,7 +117,7 @@ const testLog: LogEntry[] = [
         userId: null,
     },
     {
-        id: 'test',
+        id: 'test7',
         message: 'Test Message4',
         severity: 'Error',
         request: 'someRequestBodyJSON',
@@ -128,7 +128,7 @@ const testLog: LogEntry[] = [
         userId: null,
     },
     {
-        id: 'test',
+        id: 'test8',
         message: 'Test Message4',
         severity: 'Critical',
         request: 'someRequestBodyJSON',
@@ -152,25 +152,27 @@ export function Logs() {
     function getFiltersFromURL(): FiltersInterface {
         return {
             limit: searchParams.get("limit") ? Number(searchParams.get("limit")) : null,
-            logEntryIdFilter: searchParams.get("logEntryId") || null,
-            severityFilter: searchParams.get("severity") || null,
-            messageFilter: searchParams.get("message") || null,
-            requestFilter: searchParams.get("request") || null,
-            userIdFilter: searchParams.get("userId") || null,
-            requestURLFilter: searchParams.get("requestURL") || null,
-            responseFilter: searchParams.get("response") || null,
-            lifeTimeFilter: searchParams.get("lifeTime") || null,
-            requestKeyFilter: searchParams.get("requestKey") || null,
-            startDateFilter: searchParams.get("startDate") || null,
-            endDateFilter: searchParams.get("endDate") || null,
+            logEntryIdFilter: searchParams.get("logEntryIdFilter") || null,
+            severityFilter: searchParams.get("severityFilter") || null,
+            messageFilter: searchParams.get("messageFilter") || null,
+            requestFilter: searchParams.get("requestFilter") || null,
+            userIdFilter: searchParams.get("userIdFilter") || null,
+            requestURLFilter: searchParams.get("requestURLFilter") || null,
+            responseFilter: searchParams.get("responseFilter") || null,
+            lifeTimeFilter: searchParams.get("lifeTimeFilter") || null,
+            requestKeyFilter: searchParams.get("requestKeyFilter") || null,
+            startDateFilter: searchParams.get("startDateFilter") || null,
+            endDateFilter: searchParams.get("endDateFilter") || null,
             page: searchParams.get("page") ? Number(searchParams.get("page")) : null,
             ordering: searchParams.get("ordering") || null,
         };
     }
 
-    async function loadLogsWithFilters() {
+    async function loadLogsWithFilters(filtersParams?: FiltersInterface) {
+
+        if (filtersParams === undefined) filtersParams = filters;
         try {
-            const logEntriesFromApi = await getLogsWithFiltersFromAPI(filters)
+            const logEntriesFromApi = await getLogsWithFiltersFromAPI(filtersParams)
             setLogs(logEntriesFromApi)
         } catch (error) {
             toast({
@@ -182,7 +184,10 @@ export function Logs() {
     }
 
     useEffect(() => {
-        setFilters(getFiltersFromURL());
+        const filtersTmp = getFiltersFromURL()
+        loadLogsWithFilters(filtersTmp)
+        setFilters(filtersTmp);
+
     }, []);
 
     useEffect(() => {
