@@ -12,10 +12,14 @@ export function LogsList({logEntries}: { logEntries: LogEntry[] }) {
     }
 
     return (
-        <ul>
+        <Flex
+            direction={'column'}
+            justifyContent={'flex-start'}
+            gap={3}
+        >
             {logEntries.map((entry) => (
                 <LogCard key={entry.id} logEntry={entry}/>
             ))}
-        </ul>
+        </Flex>
     );
 }

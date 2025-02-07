@@ -33,13 +33,13 @@ export function LogCard({logEntry}: { logEntry: LogEntryType }) {
                 p={4}
                 rounded="md"
                 boxShadow="md"
-                my={4}
                 cursor={'pointer'}
                 onClick={() => {console.log(123)}}
                 justifyContent="space-between"
             >
                 <Flex
                     flexDir={'column'}
+                    width={'40%'}
                 >
                     <Text>
                         {logEntry.message ?? 'No Message'}
@@ -51,6 +51,8 @@ export function LogCard({logEntry}: { logEntry: LogEntryType }) {
                 <Flex
                     flexDir={'column'}
                     align={'end'}
+                    width={'60%'}
+
                 >
                     {logEntry.severity ? (
                         <PillTag content={logEntry.severity}

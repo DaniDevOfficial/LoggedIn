@@ -3,7 +3,8 @@ import {Filters} from "../components/LoggingDisplay/Filters.tsx";
 import {useSearchParams} from "react-router-dom";
 import {LogsList} from "../components/LoggingDisplay/LogsList.tsx";
 import {getLogsWithFiltersFromAPI} from "../repo/Logs.ts";
-import {useToast} from "@chakra-ui/react";
+import {Flex, Skeleton, Spinner, useToast} from "@chakra-ui/react";
+import {PillTag} from "../components/ui/PillTag.tsx";
 
 export interface FiltersInterface {
     logEntryIdFilter: string | null;
@@ -144,6 +145,7 @@ const testLog: LogEntry[] = [
 export function Logs() {
     const [filters, setFilters] = useState<FiltersInterface>(emptyFilters);
     const [logs, setLogs] = useState<LogEntry[]>(testLog);
+    const [loading, setLoading] = useState<boolean>(true);
     const [searchParams, setSearchParams] = useSearchParams();
     const prevParamsRef = useRef<string>("");
 
@@ -169,7 +171,7 @@ export function Logs() {
     }
 
     async function loadLogsWithFilters(filtersParams?: FiltersInterface) {
-
+        setLoading(true)
         if (filtersParams === undefined) filtersParams = filters;
         try {
             const logEntriesFromApi = await getLogsWithFiltersFromAPI(filtersParams)
@@ -181,6 +183,7 @@ export function Logs() {
                 title: 'Error',
             })
         }
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -208,7 +211,29 @@ export function Logs() {
     return (
         <>
             <Filters filters={filters} setFilters={setFilters} loadLogsWithFilters={loadLogsWithFilters}/>
-            <LogsList logEntries={logs}/>
+            {loading ? (
+                <Flex direction={'column'} gap={3} justifyContent="center" alignItems="center" height={'50vw'}>
+                    <Skeleton
+                        width={'100%'}
+                        height={'18%'}
+                        rounded="md"
+                    />                    <Skeleton
+                        width={'100%'}
+                        height={'18%'}
+                        rounded="md"
+                    />                    <Skeleton
+                        width={'100%'}
+                        height={'18%'}
+                        rounded="md"
+                    />                    <Skeleton
+                        width={'100%'}
+                        height={'18%'}
+                        rounded="md"
+                    />
+                </Flex>
+            ) : (
+                <LogsList logEntries={logs}/>
+            )}
         </>
     );
 }

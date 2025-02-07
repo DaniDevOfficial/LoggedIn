@@ -59,6 +59,7 @@ export function PillTag({ content, colorScheme = "blue" }: { content: string; co
             fontWeight="bold"
             px={4}
             py={1}
+            userSelect={'none'}
         >
             {content}
         </Tag>
