@@ -1,4 +1,5 @@
 export function formatDateTime(dateTime: string): string {
+    console.log(dateTime);
     const tmp = new Date(dateTime);
     if (isNaN(tmp.getTime())) {
         return dateTime;

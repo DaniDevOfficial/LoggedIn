@@ -1,4 +1,4 @@
-import {Box, Flex, useColorMode, Text} from "@chakra-ui/react";
+import {Flex, useColorMode, Text} from "@chakra-ui/react";
 import {LogEntry as LogEntryType} from "../../pages/Logs";
 import {formatDateTime} from "../../utility/dateTime";
 import {useEffect} from "react";
@@ -18,7 +18,6 @@ const severityColorMapping: Record<string, string> = {
 export function LogCard({logEntry}: { logEntry: LogEntryType }) {
     const {colorMode} = useColorMode();
 
-    useEffect(() => {
         try {
             logEntry.request = JSON.parse(logEntry.request ?? '');
         } catch (e) {
@@ -27,9 +26,6 @@ export function LogCard({logEntry}: { logEntry: LogEntryType }) {
         if (logEntry.dateTime) {
             logEntry.dateTime = formatDateTime(logEntry.dateTime);
         }
-
-    }, []);
-
     return (
         <>
             <Flex

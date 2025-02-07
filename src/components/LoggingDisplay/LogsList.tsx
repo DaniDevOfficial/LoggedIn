@@ -13,8 +13,8 @@ export function LogsList({logEntries}: { logEntries: LogEntry[] }) {
 
     return (
         <ul>
-            {logEntries.map((entry, index) => (
-                <LogCard key={index} logEntry={entry}/>
+            {logEntries.map((entry) => (
+                <LogCard key={entry.id} logEntry={entry}/>
             ))}
         </ul>
     );

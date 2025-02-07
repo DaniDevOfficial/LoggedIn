@@ -2,6 +2,8 @@ import {useEffect, useState, useRef} from "react";
 import {Filters} from "../components/LoggingDisplay/Filters.tsx";
 import {useSearchParams} from "react-router-dom";
 import {LogsList} from "../components/LoggingDisplay/LogsList.tsx";
+import {getLogsWithFiltersFromAPI} from "../repo/Logs.ts";
+import {useToast} from "@chakra-ui/react";
 
 export interface FiltersInterface {
     logEntryIdFilter: string | null;
@@ -145,6 +147,8 @@ export function Logs() {
     const [searchParams, setSearchParams] = useSearchParams();
     const prevParamsRef = useRef<string>("");
 
+    const toast = useToast();
+
     function getFiltersFromURL(): FiltersInterface {
         return {
             limit: searchParams.get("limit") ? Number(searchParams.get("limit")) : null,
@@ -164,6 +168,19 @@ export function Logs() {
         };
     }
 
+    async function loadLogsWithFilters() {
+        try {
+            const logEntriesFromApi = await getLogsWithFiltersFromAPI(filters)
+            setLogs(logEntriesFromApi)
+        } catch (error) {
+            toast({
+                status: 'error',
+                description: error.message,
+                title: 'Error',
+            })
+        }
+    }
+
     useEffect(() => {
         setFilters(getFiltersFromURL());
     }, []);
@@ -181,11 +198,11 @@ export function Logs() {
             prevParamsRef.current = newParamsString;
             setSearchParams(newParams);
         }
-    }, [filters, setSearchParams]);
+    }, [filters]);
 
     return (
         <>
-            <Filters filters={filters} setFilters={setFilters}/>
+            <Filters filters={filters} setFilters={setFilters} loadLogsWithFilters={loadLogsWithFilters}/>
             <LogsList logEntries={logs}/>
         </>
     );
