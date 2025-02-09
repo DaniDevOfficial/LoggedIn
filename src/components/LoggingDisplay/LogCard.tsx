@@ -1,8 +1,9 @@
-import {Flex, useColorMode, Text} from "@chakra-ui/react";
+import {Flex, useColorMode, Text, useDisclosure} from "@chakra-ui/react";
 import {LogEntry as LogEntryType} from "../../pages/Logs";
 import {formatDateTime} from "../../utility/dateTime";
 import {useEffect} from "react";
 import {PillTag} from "../ui/PillTag.tsx";
+import {LogEntryDrawer} from "./LogEntryDrawer.tsx";
 
 const severityColorMapping: Record<string, string> = {
     debug: 'blue',
@@ -17,6 +18,7 @@ const severityColorMapping: Record<string, string> = {
 
 export function LogCard({logEntry}: { logEntry: LogEntryType }) {
     const {colorMode} = useColorMode();
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
         try {
             logEntry.request = JSON.parse(logEntry.request ?? '');
@@ -28,15 +30,17 @@ export function LogCard({logEntry}: { logEntry: LogEntryType }) {
         }
     return (
         <>
+            <LogEntryDrawer isOpen={isOpen} onClose={onClose} logEntry={logEntry} />
             <Flex
                 bg={colorMode === 'light' ? 'gray.100' : 'gray.700'}
                 p={4}
                 rounded="md"
                 boxShadow="md"
                 cursor={'pointer'}
-                onClick={() => {console.log(123)}}
+                onClick={() => {onOpen()}}
                 justifyContent="space-between"
             >
+
                 <Flex
                     flexDir={'column'}
                     width={'40%'}
