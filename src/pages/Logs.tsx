@@ -3,8 +3,7 @@ import {Filters} from "../components/LoggingDisplay/Filters.tsx";
 import {useSearchParams} from "react-router-dom";
 import {LogsList} from "../components/LoggingDisplay/LogsList.tsx";
 import {getLogsWithFiltersFromAPI} from "../repo/Logs.ts";
-import {Flex, Skeleton, Spinner, useToast} from "@chakra-ui/react";
-import {PillTag} from "../components/ui/PillTag.tsx";
+import {Flex, Skeleton, useToast} from "@chakra-ui/react";
 
 export interface FiltersInterface {
     logEntryIdFilter: string | null;
@@ -29,7 +28,7 @@ export interface LogEntry {
     severity: string | null,
     request: string | null,
     userId: string | null,
-    requestURL: string | null,
+    requestUrl: string | null,
     requestKey: string | null,
     response: string | null,
     dateTime: string | null,
@@ -52,99 +51,10 @@ const emptyFilters: FiltersInterface = {
     page: null,
     ordering: null,
 };
-const testLog: LogEntry[] = [
-    {
-        id: 'test1',
-        message: 'Test Message',
-        severity: 'Emergency',
-        request: 'someRequestBodyJSON',
-        requestURL: '/api/test POST',
-        response: '200 Success',
-        dateTime: '2025-02-03T16:51:04.592Z',
-        requestKey: null,
-        userId: null,
-    }, {
-        id: 'test2',
-        message: 'Test Message2',
-        severity: 'Alert',
-        request: 'someRequestBodyJSON',
-        requestURL: '/api/test POST',
-        response: '200 Success',
-        dateTime: '2025-02-03T16:51:04.592Z',
-        requestKey: null,
-        userId: null,
-    }, {
-        id: 'tesr3',
-        message: 'Test Message3',
-        severity: 'Info',
-        request: 'someRequestBodyJSON',
-        requestURL: '/api/test POST',
-        response: '200 Success',
-        dateTime: '2025-02-03T16:51:04.592Z',
-        requestKey: null,
-        userId: null,
-    },
-    {
-        id: 'test4',
-        message: 'Test Message4',
-        severity: 'Notice',
-        request: 'someRequestBodyJSON',
-        requestURL: '/api/test POST',
-        response: '200 Success',
-        dateTime: '2025-02-03T16:51:04.592Z',
-        requestKey: 'requestKey2132123',
-        userId: null,
-    },
-    {
-        id: 'test5',
-        message: 'Test Message4',
-        severity: 'Debug',
-        request: 'someRequestBodyJSON',
-        requestURL: '/api/test POST',
-        response: '200 Success',
-        dateTime: '2025-02-03T16:51:04.592Z',
-        requestKey: 'requestKey2132123',
-        userId: null,
-    },
-    {
-        id: 'test6',
-        message: 'Test Message4',
-        severity: 'Warning',
-        request: 'someRequestBodyJSON',
-        requestURL: '/api/test POST',
-        response: '200 Success',
-        dateTime: '2025-02-03T16:51:04.592Z',
-        requestKey: 'requestKey2132123',
-        userId: null,
-    },
-    {
-        id: 'test7',
-        message: 'Test Message4',
-        severity: 'Error',
-        request: 'someRequestBodyJSON',
-        requestURL: '/api/test POST',
-        response: '200 Success',
-        dateTime: '2025-02-03T16:51:04.592Z',
-        requestKey: 'requestKey2132123',
-        userId: null,
-    },
-    {
-        id: 'test8',
-        message: 'Test Message4',
-        severity: 'Critical',
-        request: 'someRequestBodyJSON',
-        requestURL: '/api/test POST',
-        response: '200 Success',
-        dateTime: '2025-02-03T16:51:04.592Z',
-        requestKey: 'requestKey2132123',
-        userId: null,
-    },
-
-]
 
 export function Logs() {
     const [filters, setFilters] = useState<FiltersInterface>(emptyFilters);
-    const [logs, setLogs] = useState<LogEntry[]>(testLog);
+    const [logs, setLogs] = useState<LogEntry[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [searchParams, setSearchParams] = useSearchParams();
     const prevParamsRef = useRef<string>("");

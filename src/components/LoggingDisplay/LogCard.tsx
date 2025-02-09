@@ -4,40 +4,32 @@ import {formatDateTime} from "../../utility/dateTime";
 import {useEffect} from "react";
 import {PillTag} from "../ui/PillTag.tsx";
 import {LogEntryDrawer} from "./LogEntryDrawer.tsx";
-
-const severityColorMapping: Record<string, string> = {
-    debug: 'blue',
-    info: 'green',
-    notice: 'cyan',
-    warning: 'orange',
-    error: 'red',
-    critical: 'purple',
-    alert: 'yellow',
-    emergency: 'black'
-}
+import {severityColorMapping} from "../../utility/colorMapping.ts";
 
 export function LogCard({logEntry}: { logEntry: LogEntryType }) {
     const {colorMode} = useColorMode();
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const {isOpen, onOpen, onClose} = useDisclosure();
 
-        try {
-            logEntry.request = JSON.parse(logEntry.request ?? '');
-        } catch (e) {
-            // Do nothing
-        }
-        if (logEntry.dateTime) {
-            logEntry.dateTime = formatDateTime(logEntry.dateTime);
-        }
+    try {
+        logEntry.request = JSON.parse(logEntry.request ?? '');
+    } catch (e) {
+        // Do nothing
+    }
+    if (logEntry.dateTime) {
+        logEntry.dateTime = formatDateTime(logEntry.dateTime);
+    }
     return (
         <>
-            <LogEntryDrawer isOpen={isOpen} onClose={onClose} logEntry={logEntry} />
+            <LogEntryDrawer isOpen={isOpen} onClose={onClose} logEntry={logEntry}/>
             <Flex
                 bg={colorMode === 'light' ? 'gray.100' : 'gray.700'}
                 p={4}
                 rounded="md"
                 boxShadow="md"
                 cursor={'pointer'}
-                onClick={() => {onOpen()}}
+                onClick={() => {
+                    onOpen()
+                }}
                 justifyContent="space-between"
             >
 
@@ -59,8 +51,10 @@ export function LogCard({logEntry}: { logEntry: LogEntryType }) {
 
                 >
                     {logEntry.severity ? (
-                        <PillTag content={logEntry.severity}
-                                 colorScheme={severityColorMapping[logEntry.severity.toLowerCase()] ?? ''}/>
+                        <PillTag
+                            content={logEntry.severity}
+                            colorScheme={severityColorMapping[logEntry.severity.toLowerCase()] ?? ''}
+                        />
                     ) : (
                         <PillTag content={'Info'}/>
                     )}
