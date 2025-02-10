@@ -89,6 +89,8 @@ export function Logs() {
         } catch (error) {
             toast({
                 status: 'error',
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
                 description: error.message,
                 title: 'Error',
             })
@@ -98,7 +100,7 @@ export function Logs() {
 
     useEffect(() => {
         const filtersTmp = getFiltersFromURL()
-        loadLogsWithFilters(filtersTmp)
+        loadLogsWithFilters(filtersTmp).then(() => 1)
         setFilters(filtersTmp);
 
     }, []);
@@ -127,15 +129,18 @@ export function Logs() {
                         width={'100%'}
                         height={'18%'}
                         rounded="md"
-                    />                    <Skeleton
+                    />
+                    <Skeleton
                         width={'100%'}
                         height={'18%'}
                         rounded="md"
-                    />                    <Skeleton
+                    />
+                    <Skeleton
                         width={'100%'}
                         height={'18%'}
                         rounded="md"
-                    />                    <Skeleton
+                    />
+                    <Skeleton
                         width={'100%'}
                         height={'18%'}
                         rounded="md"

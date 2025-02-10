@@ -82,7 +82,7 @@ export function Filters({filters, setFilters, loadLogsWithFilters}: {
                     cursor="pointer"
                 />
             </InputGroup>
-            <FilterDrawer isOpen={isOpen} onClose={onClose} filters={filters} />
+            <FilterDrawer isOpen={isOpen} onClose={onClose} filters={filters} setFilters={setFilters} />
         </Flex>
     );
 }

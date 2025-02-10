@@ -1,7 +1,6 @@
 import {Flex, useColorMode, Text, useDisclosure} from "@chakra-ui/react";
 import {LogEntry as LogEntryType} from "../../pages/Logs";
 import {formatDateTime} from "../../utility/dateTime";
-import {useEffect} from "react";
 import {PillTag} from "../ui/PillTag.tsx";
 import {LogEntryDrawer} from "./LogEntryDrawer.tsx";
 import {severityColorMapping} from "../../utility/colorMapping.ts";
