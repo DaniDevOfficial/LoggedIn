@@ -1,27 +1,23 @@
 import {LogEntry} from "../../pages/Logs.tsx";
 import {
     Box,
-    Code,
     Drawer,
     DrawerBody,
     DrawerCloseButton,
     DrawerContent,
     DrawerHeader,
-    DrawerOverlay, Flex, FormControl, FormLabel, Input, Text, Textarea, useToast
+    DrawerOverlay, Flex, FormControl, FormLabel, IconButton, Input, Text, Textarea, useClipboard, useToast
 } from "@chakra-ui/react";
 import {PillTag} from "../ui/PillTag.tsx";
 import {severityColorMapping} from "../../utility/colorMapping.ts";
 import {isJsonString} from "../../utility/json.ts";
+import {CopyIcon} from "@chakra-ui/icons";
 
 export function LogEntryDrawer({isOpen, onClose, logEntry}: {
     isOpen: boolean,
     onClose: () => void,
     logEntry: LogEntry
 }) {
-
-
-    const requestIsJson = isJsonString(logEntry.request ?? '');
-    const responseIsJson = isJsonString(logEntry.response ?? '');
 
 
     return (
@@ -78,8 +74,6 @@ export function LogEntryDrawer({isOpen, onClose, logEntry}: {
 }
 
 
-import { useClipboard, IconButton } from "@chakra-ui/react";
-import { CopyIcon } from "@chakra-ui/icons";
 
 function FormatedJsonTextArea({ text, title }: { text: string; title: string }) {
     const isJson = isJsonString(text);

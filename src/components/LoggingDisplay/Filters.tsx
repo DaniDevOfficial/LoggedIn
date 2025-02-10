@@ -1,6 +1,18 @@
-import {Button, Flex, Input, InputGroup, NumberInput, NumberInputField, Select} from "@chakra-ui/react";
+import {
+    Flex,
+    IconButton,
+    Input,
+    InputGroup,
+    NumberInput,
+    NumberInputField,
+    Select,
+    useDisclosure
+} from "@chakra-ui/react";
 import React from "react";
 import {FiltersInterface} from "../../pages/Logs.tsx";
+import {SearchIcon} from "@chakra-ui/icons";
+import {FaFilter} from "react-icons/fa";
+import {FilterDrawer} from "./FilterDrawer.tsx";
 
 export function Filters({filters, setFilters, loadLogsWithFilters}: {
     filters: FiltersInterface,
@@ -14,6 +26,7 @@ export function Filters({filters, setFilters, loadLogsWithFilters}: {
         newFilters[filtersType] = value;
         setFilters(newFilters);
     }
+    const {isOpen, onOpen, onClose} = useDisclosure();
 
 
     return (
@@ -53,10 +66,23 @@ export function Filters({filters, setFilters, loadLogsWithFilters}: {
                     <option value="emergency">Emergency</option>
                 </Select>
 
-                <Button onClick={() => (loadLogsWithFilters())}>
-                    Search
-                </Button>
+
+                <IconButton
+                    aria-label="Show all filters"
+                    icon={<SearchIcon />}
+                    size="sm"
+                    cursor="pointer"
+                    onClick={() => (loadLogsWithFilters())}
+                />
+                <IconButton
+                    aria-label="Show all filters"
+                    icon={<FaFilter />}
+                    onClick={() => {onOpen()}}
+                    size="sm"
+                    cursor="pointer"
+                />
             </InputGroup>
+            <FilterDrawer isOpen={isOpen} onClose={onClose} filters={filters} />
         </Flex>
     );
 }
