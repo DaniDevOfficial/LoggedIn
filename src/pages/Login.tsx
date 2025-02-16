@@ -34,14 +34,15 @@ export function Login() {
         const data: LoginRequest = {
             username: username,
             password: password,
+            isTimeBased: false,
         }
         try {
             const response = await loginToAccount(data)
 
            if (response.isClaimed) {
-
+                navigate("/logs");
            } else {
-               navigate('logs')
+               navigate('/claim')
            }
 
         } catch (e) {

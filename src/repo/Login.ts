@@ -1,8 +1,10 @@
-const apiUrl = import.meta.env.BACKEND_URL
+import {handleAuthorisationKeysFromHeader} from "./Auth.ts";
 
+const apiUrl = import.meta.env.VITE_BACKEND_URL
 export interface LoginRequest {
     username: string;
     password: string;
+    isTimeBased: boolean;
 }
 
 export interface LoginResponse {
@@ -22,10 +24,15 @@ export async function loginToAccount(loginData: LoginRequest): Promise<LoginResp
         },
         body: JSON.stringify(loginData),
     });
+    const headers = Object.fromEntries(response.headers.entries());
+    console.log("All Headers:", headers);
+
+    console.log(response.headers.get('Authorization'));
+    handleAuthorisationKeysFromHeader(response.headers)
+
 
     const data: unknown = await response.json();
 
-    handleAuthorisationKeysFromHeader(response.headers)
 
     if (!response.ok) {
         if (isErrorResponse(data)) {

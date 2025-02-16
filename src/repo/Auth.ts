@@ -1,7 +1,6 @@
-function handleAuthorisationKeysFromHeader(header: Headers) {
+export function handleAuthorisationKeysFromHeader(header: Headers) {
     const authHeader = header.get('Authorization');
     const refreshToken = header.get('RefreshToken');
-
     if (authHeader !== null) {
         localStorage.setItem('Authorization', authHeader);
     }

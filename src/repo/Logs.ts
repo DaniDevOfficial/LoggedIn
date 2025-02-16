@@ -1,6 +1,6 @@
 import {FiltersInterface, LogEntry} from "../pages/Logs.tsx";
 
-const apiUrl = import.meta.env.BACKEND_URL
+const apiUrl = import.meta.env.VITE_BACKEND_URL
 
 
 
