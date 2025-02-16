@@ -86,7 +86,8 @@ function FormatedJsonTextArea({ text, title }: { text: string; title: string }) 
             status: 'success',
             description: 'Coppied to clipboard',
             title: 'Copy',
-        })    }
+        })
+    }
 
     return (
         <FormControl>

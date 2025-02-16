@@ -34,7 +34,6 @@ export interface LogEntry {
     dateTime: string | null,
 }
 
-
 const emptyFilters: FiltersInterface = {
     logEntryIdFilter: null,
     severityFilter: null,

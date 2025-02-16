@@ -1,6 +1,7 @@
 import {FiltersInterface, LogEntry} from "../pages/Logs.tsx";
 
-const apiUrl = 'http://localhost:8000/'
+const apiUrl = import.meta.env.BACKEND_URL
+
 
 
 export async function getLogsWithFiltersFromAPI(filters: FiltersInterface): Promise<LogEntry[]> {
