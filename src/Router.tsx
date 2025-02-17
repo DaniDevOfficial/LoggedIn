@@ -3,6 +3,7 @@ import { DefaultLayout } from "./layouts/Default";
 import { HomePage } from "./pages/Home";
 import { Logs } from "./pages/Logs";
 import {Login} from "./pages/Login.tsx";
+import {Claim} from "./pages/Claim.tsx";
 
 
 const router = createHashRouter([
@@ -17,6 +18,10 @@ const router = createHashRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/claim",
+        element: <Claim />,
       },
       {
         path: "/logs",

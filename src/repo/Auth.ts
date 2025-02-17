@@ -9,10 +9,10 @@ export function handleAuthorisationKeysFromHeader(header: Headers) {
     }
 }
 
-function getRefreshToken() {
+export function getRefreshToken() {
     return localStorage.getItem('RefreshToken');
 }
 
-function getAuthToken() {
+export function getAuthToken() {
     return localStorage.getItem('Authorization');
 }
