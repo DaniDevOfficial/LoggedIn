@@ -1,11 +1,11 @@
 import {
-    Button,
+    Button, Checkbox,
     Container,
     Flex,
     FormControl,
     FormLabel,
     IconButton,
-    Input,
+    Input, Text,
     useColorMode, useToast
 } from "@chakra-ui/react";
 import {useState} from "react";
@@ -17,6 +17,7 @@ import {useNavigate} from "react-router-dom";
 export function Claim() {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
+    const [isTimeBased, setIsTimeBased] = useState<boolean>(true);
     const [showRepeatPassword, setShowRepeatPassword] = useState<boolean>(false);
     const [password, setPassword] = useState<string>("");
     const [repeatPassword, setRepeatPassword] = useState<string>("");
@@ -134,6 +135,17 @@ export function Claim() {
                             />
                         </Flex>
                     </FormControl>
+                    <Flex gap={2}>
+                        <Text>
+                            Stay Logged In
+                        </Text>
+                        <Checkbox
+                            colorScheme={'teal'}
+                            value={isTimeBased ? 1 : 0}
+                            onChange={() =>  {setIsTimeBased(!isTimeBased)}}
+                        />
+
+                    </Flex>
                     <Button
                         colorScheme={"teal"}
                         onClick={submitForm}

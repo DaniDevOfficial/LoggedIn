@@ -1,11 +1,11 @@
 import {
-    Button,
+    Button, Checkbox,
     Container,
     Flex,
     FormControl,
     FormLabel,
     IconButton,
-    Input,
+    Input, Text,
     useColorMode, useToast
 } from "@chakra-ui/react";
 import {useState} from "react";
@@ -17,15 +17,17 @@ export function Login() {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [isTimeBased, setIsTimeBased] = useState<boolean>(true);
     const {colorMode} = useColorMode();
     const toast = useToast();
     const navigate = useNavigate();
+
     async function submitForm() {
 
         if (password === "" || username === "") {
             toast({
                 status: 'warning',
-                description: 'Username or password is wrong!',
+                description: 'Username or password are wrong!',
                 title: 'Issue',
             })
             return
@@ -33,18 +35,19 @@ export function Login() {
         const data: LoginRequest = {
             username: username,
             password: password,
-            isTimeBased: false,
+            isTimeBased: isTimeBased,
         }
         try {
             const response = await loginToAccount(data)
 
-           if (response.isClaimed) {
+            if (response.isClaimed) {
                 navigate("/logs");
-           } else {
-               navigate('/claim')
-           }
+            } else {
+                navigate('/claim')
+            }
 
         } catch (e) {
+
             toast({
                 status: 'error',
                 description: e.message,
@@ -103,6 +106,17 @@ export function Login() {
                             />
                         </Flex>
                     </FormControl>
+                       <Flex gap={2}>
+                           <Text>
+                               Stay Logged In
+                           </Text>
+                        <Checkbox
+                            colorScheme={'teal'}
+                            value={isTimeBased ? 1 : 0}
+                            onChange={() =>  {setIsTimeBased(!isTimeBased)}}
+                        />
+
+                       </Flex>
                     <Button
                         colorScheme={"teal"}
                         onClick={submitForm}

@@ -1,5 +1,5 @@
 import {FiltersInterface, LogEntry} from "../pages/Logs.tsx";
-import {getAuthToken, getRefreshToken} from "./Auth.ts";
+import {getAuthToken, getRefreshToken, handleAuthorisationKeysFromHeader} from "./Auth.ts";
 import {BadRequestError, InternalServerError, UnauthorizedError} from "../utility/Errors.ts";
 import {BAD_REQUEST, INTERNAL_SERVER_ERROR, UNAUTHORIZED} from "../utility/HttpResponseCodes.ts";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -25,11 +25,13 @@ export async function getLogsWithFiltersFromAPI(filters: FiltersInterface): Prom
             'Content-Type': 'application/json',
         },
     });
+    handleAuthorisationKeysFromHeader(response.headers);
 
     const logs: LogEntry[] = await response.json();
 
     if (!response.ok) {
 
+        console.log(response);
         if (response.status === UNAUTHORIZED) {
             throw new UnauthorizedError('Not authorized');
         }

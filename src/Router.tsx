@@ -13,10 +13,6 @@ const router = createHashRouter([
     children: [
       {
         index: true, // same path as parent: "/"
-        element: <HomePage />,
-      },
-      {
-        path: "/login",
         element: <Login />,
       },
       {
