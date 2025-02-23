@@ -5,8 +5,14 @@ export function handleAuthorisationKeysFromHeader(header: Headers) {
         localStorage.setItem('Authorization', authHeader);
     }
     if (refreshToken !== null) {
+        console.log(refreshToken);
         localStorage.setItem('RefreshToken', refreshToken);
     }
+}
+
+export function voidTokens() {
+    localStorage.removeItem('Authorization');
+    localStorage.removeItem('RefreshToken');
 }
 
 export function getRefreshToken() {

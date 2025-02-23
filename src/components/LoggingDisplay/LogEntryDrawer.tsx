@@ -28,7 +28,7 @@ export function LogEntryDrawer({isOpen, onClose, logEntry}: {
                     <DrawerCloseButton/>
                     <DrawerBody>
                         <Flex direction="column" justify="space-between">
-                            <DrawerHeader>
+                            <DrawerHeader paddingLeft={0}>
                                 <Flex
                                     gap={5}
                                     justifyContent="space-between"
@@ -56,7 +56,7 @@ export function LogEntryDrawer({isOpen, onClose, logEntry}: {
                                 <>
                                     <FormControl>
                                         <FormLabel>Request URL</FormLabel>
-                                        <Input value={logEntry.requestUrl}/>
+                                        <Input readOnly value={logEntry.requestUrl}/>
                                     </FormControl>
                                 </>
                             )}

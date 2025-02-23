@@ -1,9 +1,11 @@
 import {useEffect, useState, useRef} from "react";
 import {Filters} from "../components/LoggingDisplay/Filters.tsx";
-import {useSearchParams} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {LogsList} from "../components/LoggingDisplay/LogsList.tsx";
 import {getLogsWithFiltersFromAPI} from "../repo/Logs.ts";
 import {Flex, Skeleton, useToast} from "@chakra-ui/react";
+import {BadRequestError, UnauthorizedError} from "../utility/Errors.ts";
+import {voidTokens} from "../repo/Auth.ts";
 
 export interface FiltersInterface {
     logEntryIdFilter: string | null;
@@ -59,7 +61,7 @@ export function Logs() {
     const prevParamsRef = useRef<string>("");
 
     const toast = useToast();
-
+    const navigate = useNavigate();
     function getFiltersFromURL(): FiltersInterface {
         return {
             limit: searchParams.get("limit") ? Number(searchParams.get("limit")) : null,
@@ -85,12 +87,17 @@ export function Logs() {
         try {
             const logEntriesFromApi = await getLogsWithFiltersFromAPI(filtersParams)
             setLogs(logEntriesFromApi)
-        } catch (error) {
+        }
+        catch (e) {
+            if (e instanceof UnauthorizedError) {
+                voidTokens()
+                navigate('/')
+            }
             toast({
                 status: 'error',
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-expect-error
-                description: error.message,
+                description: e.message,
                 title: 'Error',
             })
         }

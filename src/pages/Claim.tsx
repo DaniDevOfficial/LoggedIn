@@ -26,7 +26,7 @@ export function Claim() {
     const navigate = useNavigate();
 
     async function submitForm() {
-/*        try {
+        try {
             if (!isValidPassword(password, repeatPassword)) {
                 toast({
                     status: 'warning',
@@ -43,7 +43,7 @@ export function Claim() {
             })
             return
         }
-*/
+
         const data: ClaimRequest = {
             password: password,
             isTimeBased: false,
