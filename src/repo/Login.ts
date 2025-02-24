@@ -1,4 +1,6 @@
-import {getAuthToken, handleAuthorisationKeysFromHeader} from "./Auth.ts";
+import {getAuthToken, getRefreshToken, handleAuthorisationKeysFromHeader, voidTokens} from "./Auth.ts";
+import {BadRequestError, DoNothingError, InternalServerError, UnauthorizedError} from "../utility/Errors.ts";
+import {BAD_REQUEST, INTERNAL_SERVER_ERROR, UNAUTHORIZED} from "../utility/HttpResponseCodes.ts";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
@@ -92,7 +94,7 @@ export async function claimAccount(claimData: ClaimRequest): Promise<LoginRespon
     return data as LoginResponse;
 }
 
-async function checkIfIsClaimToken(token: string) {
+export async function checkIfIsClaimToken(token: string) {
     const parts = token.split('.');
     if (parts.length !== 3) {
         return false;
@@ -108,6 +110,43 @@ async function checkIfIsClaimToken(token: string) {
         return false;
     }
     return false;
+}
+
+export async function checkAuthentication() {
+    const url = apiUrl + 'auth/check';
+    const refreshToken = getRefreshToken();
+    const authToken = '';
+    if (!refreshToken) {
+        voidTokens()
+        throw new DoNothingError('Not authorized');
+
+    }
+
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'RefreshToken': refreshToken,
+            'Authorization': authToken,
+            'Content-Type': 'application/json',
+        },
+    });
+    handleAuthorisationKeysFromHeader(response.headers);
+
+    if (!response.ok) {
+        voidTokens()
+        if (response.status === UNAUTHORIZED) {
+            throw new UnauthorizedError('Not authorized');
+        }
+        if (response.status === BAD_REQUEST) {
+            throw new BadRequestError('Wrong data provided');
+        }
+        if (response.status === INTERNAL_SERVER_ERROR) {
+            throw new InternalServerError("Internal server error");
+        }
+
+        throw new Error('An unexpected error occurred');
+    }
+
 }
 
 function decodeBase64Json(base64String: string) {

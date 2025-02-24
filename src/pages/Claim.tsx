@@ -5,18 +5,27 @@ import {
     FormControl,
     FormLabel,
     IconButton,
-    Input, Text,
+    Input, Spinner, Text,
     useColorMode, useToast
 } from "@chakra-ui/react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {BsEye} from "react-icons/bs";
-import {claimAccount, ClaimRequest, LoginRequest, loginToAccount} from "../repo/Login.ts";
+import {
+    checkAuthentication,
+    checkIfIsClaimToken,
+    claimAccount,
+    ClaimRequest,
+    LoginRequest,
+    loginToAccount
+} from "../repo/Login.ts";
 import {useNavigate} from "react-router-dom";
+import {getAuthToken, voidTokens} from "../repo/Auth.ts";
+import {Loader} from "../components/ui/Loader.tsx";
 
 
 export function Claim() {
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
     const [isTimeBased, setIsTimeBased] = useState<boolean>(true);
     const [showRepeatPassword, setShowRepeatPassword] = useState<boolean>(false);
     const [password, setPassword] = useState<string>("");
@@ -73,6 +82,53 @@ export function Claim() {
 
         return true;
     }
+
+    useEffect(() => {
+        async function checkForClaimToken() {
+
+            const claimToken = getAuthToken();
+
+            if (!claimToken) {
+                navigate('/')
+                toast({
+                    status: 'error',
+                    description: 'No claim token',
+                    title: 'Error',
+                })
+                return;
+            }
+
+            try {
+                await checkAuthentication()
+                navigate('/logs');
+                return;
+            } catch (e) {
+                //do nothing
+            }
+
+            const isValidToken = await checkIfIsClaimToken(claimToken);
+            if (!isValidToken) {
+                voidTokens();
+                navigate('/');
+                toast({
+                    status: 'error',
+                    description: 'No claim token',
+                    title: 'Error',
+                })
+                return;
+            }
+            setLoading(false);
+        }
+
+
+
+        checkForClaimToken();
+    }, []);
+
+    if (loading) {
+        return  <Loader />
+    }
+
 
     return (
         <Flex
@@ -142,7 +198,9 @@ export function Claim() {
                         <Checkbox
                             colorScheme={'teal'}
                             value={isTimeBased ? 1 : 0}
-                            onChange={() =>  {setIsTimeBased(!isTimeBased)}}
+                            onChange={() => {
+                                setIsTimeBased(!isTimeBased)
+                            }}
                         />
 
                     </Flex>

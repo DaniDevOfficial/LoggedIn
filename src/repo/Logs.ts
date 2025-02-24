@@ -14,7 +14,7 @@ export async function getLogsWithFiltersFromAPI(filters: FiltersInterface): Prom
     const refreshToken = getRefreshToken();
     const authToken = getAuthToken() ?? '';
     if (!refreshToken) {
-        throw new Error('An unknown error occurred');
+        throw new UnauthorizedError('Not authorized');
     }
 
     const response = await fetch(url + queryParams, {
@@ -31,7 +31,6 @@ export async function getLogsWithFiltersFromAPI(filters: FiltersInterface): Prom
 
     if (!response.ok) {
 
-        console.log(response);
         if (response.status === UNAUTHORIZED) {
             throw new UnauthorizedError('Not authorized');
         }

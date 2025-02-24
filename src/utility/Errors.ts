@@ -11,7 +11,15 @@ export class BadRequestError extends Error {
         this.name = 'BadRequestError';
     }
 }
+
 export class InternalServerError extends Error {
+    constructor(message: any) {
+        super(message);
+        this.name = 'InternalServerError';
+    }
+}
+
+export class DoNothingError extends Error {
     constructor(message: any) {
         super(message);
         this.name = 'InternalServerError';

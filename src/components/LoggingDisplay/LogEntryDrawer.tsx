@@ -73,8 +73,6 @@ export function LogEntryDrawer({isOpen, onClose, logEntry}: {
     );
 }
 
-
-
 function FormatedJsonTextArea({ text, title }: { text: string; title: string }) {
     const isJson = isJsonString(text);
     const toast = useToast();
