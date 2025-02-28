@@ -26,63 +26,78 @@ export function Filters({filters, setFilters, loadLogsWithFilters}: {
         newFilters[filtersType] = value;
         setFilters(newFilters);
     }
+
     const {isOpen, onOpen, onClose} = useDisclosure();
 
-
+    
     return (
-        <Flex>
-            <InputGroup>
-
-                <Input
-                    placeholder="Message"
-                    value={filters.messageFilter === null ? '' : filters.messageFilter}
-                    onChange={(e) => updateFilters("messageFilter", e.target.value || null)}
-                />
-
-                <NumberInput
-                    min={1}
-                    max={500}
-                    value={typeof filters.limit === "number" ? filters.limit : ""}
-                    onChange={(valueAsString) => {
-                        const numericValue = Number(valueAsString);
-                        updateFilters("limit", (isNaN(numericValue) || numericValue === 0) ? null : numericValue);
-                    }}
+        <Flex
+            gap={2}
+            justifyContent="center"
+        >
+            <form onSubmit={onOpen}>
+                <Flex
+                    gap={2}
+                    justifyContent="center"
+                    alignItems="center"
                 >
-                    <NumberInputField placeholder="Limit"/>
-                </NumberInput>
 
-                <Select
-                    placeholder="Select Severity"
-                    value={filters.severityFilter ?? ""}
-                    onChange={(e) => updateFilters("severityFilter", e.target.value || null)}
-                >
-                    <option value="debug">Debug</option>
-                    <option value="info">Info</option>
-                    <option value="notice">Notice</option>
-                    <option value="warning">Warning</option>
-                    <option value="error">Error</option>
-                    <option value="critical">Critical</option>
-                    <option value="alert">Alert</option>
-                    <option value="emergency">Emergency</option>
-                </Select>
+                    <Input
+                        placeholder="Message"
+                        value={filters.messageFilter === null ? '' : filters.messageFilter}
+                        onChange={(e) => updateFilters("messageFilter", e.target.value || null)}
+                    />
+
+                    <NumberInput
+                        min={1}
+                        max={500}
+                        value={typeof filters.limit === "number" ? filters.limit : ""}
+                        onChange={(valueAsString) => {
+                            const numericValue = Number(valueAsString);
+                            updateFilters("limit", (isNaN(numericValue) || numericValue === 0) ? null : numericValue);
+                        }}
+                    >
+                        <NumberInputField placeholder="Limit"/>
+                    </NumberInput>
+
+                    <Select
+                        placeholder="Select Severity"
+                        value={filters.severityFilter ?? ""}
+                        onChange={(e) => updateFilters("severityFilter", e.target.value || null)}
+                    >
+                        <option value="debug">Debug</option>
+                        <option value="info">Info</option>
+                        <option value="notice">Notice</option>
+                        <option value="warning">Warning</option>
+                        <option value="error">Error</option>
+                        <option value="critical">Critical</option>
+                        <option value="alert">Alert</option>
+                        <option value="emergency">Emergency</option>
+                    </Select>
 
 
-                <IconButton
-                    aria-label="Show all filters"
-                    icon={<SearchIcon />}
-                    size="sm"
-                    cursor="pointer"
-                    onClick={() => (loadLogsWithFilters())}
-                />
-                <IconButton
-                    aria-label="Show all filters"
-                    icon={<FaFilter />}
-                    onClick={() => {onOpen()}}
-                    size="sm"
-                    cursor="pointer"
-                />
-            </InputGroup>
-            <FilterDrawer isOpen={isOpen} onClose={onClose} filters={filters} setFilters={setFilters} loadLogsWithFilters={loadLogsWithFilters} />
+                    <IconButton
+                        aria-label="Show all filters"
+                        icon={<SearchIcon/>}
+                        size="sm"
+                        cursor="pointer"
+                        onClick={() => (loadLogsWithFilters())}
+                    />
+                    <IconButton
+                        aria-label="Show all filters"
+                        icon={<FaFilter/>}
+                        onClick={() => {
+                            onOpen()
+                        }}
+                        size="sm"
+                        cursor="pointer"
+                    />
+                </Flex>
+
+            </form>
+
+            <FilterDrawer isOpen={isOpen} onClose={onClose} filters={filters} setFilters={setFilters}
+                          loadLogsWithFilters={loadLogsWithFilters}/>
         </Flex>
     );
 }

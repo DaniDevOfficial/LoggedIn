@@ -1,9 +1,9 @@
 import { RouterProvider, createHashRouter } from "react-router-dom";
 import { DefaultLayout } from "./layouts/Default";
-import { HomePage } from "./pages/Home";
 import { Logs } from "./pages/Logs";
 import {Login} from "./pages/Login.tsx";
 import {Claim} from "./pages/Claim.tsx";
+import {Account} from "./pages/Account.tsx";
 
 
 const router = createHashRouter([
@@ -22,6 +22,10 @@ const router = createHashRouter([
       {
         path: "/logs",
         element: <Logs />,
+      },
+      {
+        path: "/account",
+        element: <Account />,
       }
     ],
   },
