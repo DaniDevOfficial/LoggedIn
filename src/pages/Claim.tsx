@@ -21,6 +21,7 @@ import {
 import {useNavigate} from "react-router-dom";
 import {getAuthToken, voidTokens} from "../repo/Auth.ts";
 import {Loader} from "../components/ui/Loader.tsx";
+import {isValidPassword} from "../utility/password.ts";
 
 
 export function Claim() {
@@ -71,17 +72,7 @@ export function Claim() {
         }
     }
 
-    function isValidPassword(password: string, repeatedPassword: string) {
-        if (password !== repeatedPassword) {
-            throw new Error("Passwords do not match");
-        }
 
-        if (password.length < 8) {
-            throw new Error("Password has to be at least 8 characters long");
-        }
-
-        return true;
-    }
 
     useEffect(() => {
         async function checkForClaimToken() {

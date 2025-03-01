@@ -3,6 +3,8 @@ import {isCurrentUserAdmin, voidTokens} from "../repo/Auth.ts";
 import {UnauthorizedError} from "../utility/Errors.ts";
 import {useNavigate} from "react-router-dom";
 import {useToast} from "@chakra-ui/react";
+import {CreateUser} from "../components/Account/CreateUser.tsx";
+import {Loader} from "../components/ui/Loader.tsx";
 
 export function Account() {
     const [loading, setLoading] = useState<boolean>(true);
@@ -11,11 +13,11 @@ export function Account() {
     const navigate = useNavigate();
     const toast = useToast();
 
-
     useEffect(() => {
         async function checkIfIsAdmin() {
             try {
                 const isCurrentUserAdminRes = await isCurrentUserAdmin();
+
                 setIsAdmin(isCurrentUserAdminRes);
             } catch (e) {
                 if (e instanceof UnauthorizedError) {
@@ -36,11 +38,15 @@ export function Account() {
         checkIfIsAdmin();
     }, [])
 
+    if (loading) {
+        return  <Loader />
+    }
+
 
     return (
 
         <>
-            asdsadf
+                <CreateUser />
         </>
     );
 }

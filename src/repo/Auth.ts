@@ -10,8 +10,19 @@ interface IsAdmin {
     isAdmin: boolean;
 }
 
+export interface CreateRequest {
+    username: string;
+    password: string;
+}
+
+export interface CreateResponse {
+    message: string;
+    username: string;
+}
+
+
 export async function isCurrentUserAdmin(): Promise<boolean> {
-    const url = apiUrl + 'logEntry';
+    const url = apiUrl + 'auth/admin';
     const refreshToken = getRefreshToken();
     const authToken = getAuthToken() ?? '';
     if (!refreshToken) {
@@ -48,6 +59,27 @@ export async function isCurrentUserAdmin(): Promise<boolean> {
     return isAdmin.isAdmin;
 }
 
+export async function createNewClaimAccount(createData: CreateRequest): Promise<CreateRequest> {
+    const url = apiUrl + 'auth/account';
+    const refreshToken = getRefreshToken();
+    const authToken = getAuthToken() ?? '';
+    if (!refreshToken) {
+        throw new UnauthorizedError('Not authorized');
+    }
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': authToken,
+            'RefreshToken': refreshToken,
+        },
+        body: JSON.stringify(createData)
+    });
+
+
+
+}
 
 export function handleAuthorisationKeysFromHeader(header: Headers) {
     const authHeader = header.get('Authorization');
