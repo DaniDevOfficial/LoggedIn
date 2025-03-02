@@ -9,7 +9,7 @@ import {Loader} from "../components/ui/Loader.tsx";
 export function Account() {
     const [loading, setLoading] = useState<boolean>(true);
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
-
+    console.log(typeof setIsAdmin)
     const navigate = useNavigate();
     const toast = useToast();
 

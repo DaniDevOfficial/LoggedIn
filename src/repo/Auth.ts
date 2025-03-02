@@ -59,7 +59,7 @@ export async function isCurrentUserAdmin(): Promise<boolean> {
     return isAdmin.isAdmin;
 }
 
-export async function createNewClaimAccount(createData: CreateRequest): Promise<CreateRequest> {
+export async function createNewClaimAccount(createData: CreateRequest): Promise<CreateResponse> {
     const url = apiUrl + 'auth/account';
     const refreshToken = getRefreshToken();
     const authToken = getAuthToken() ?? '';
@@ -77,8 +77,25 @@ export async function createNewClaimAccount(createData: CreateRequest): Promise<
         body: JSON.stringify(createData)
     });
 
+    const newUser: CreateResponse = await response.json();
 
+    if (!response.ok) {
 
+        if (response.status === UNAUTHORIZED) {
+            throw new UnauthorizedError('Not authorized');
+        }
+        if (response.status === BAD_REQUEST) {
+            throw new BadRequestError('Wrong data provided');
+        }
+
+        if (response.status === INTERNAL_SERVER_ERROR) {
+            throw new InternalServerError("Internal server error");
+        }
+
+        throw new Error('An unexpected error occurred');
+    }
+
+    return newUser;
 }
 
 export function handleAuthorisationKeysFromHeader(header: Headers) {

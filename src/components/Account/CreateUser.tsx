@@ -3,13 +3,14 @@ import {useState} from "react";
 import {BsEye} from "react-icons/bs";
 import {isValidPassword} from "../../utility/password.ts";
 import {useNavigate} from "react-router-dom";
+import {createNewClaimAccount, CreateRequest, voidTokens} from "../../repo/Auth.ts";
+import {UnauthorizedError} from "../../utility/Errors.ts";
+import {PasswordInput} from "../ui/PasswordInput.tsx";
 
 export function CreateUser() {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [showPassword, setShowPassword] = useState<boolean>(false);
     const [repeatPassword, setRepeatPassword] = useState<string>("");
-    const [showRepeatPassword, setShowRepeatPassword] = useState<boolean>(false);
 
     const toast = useToast();
     const navigate = useNavigate();
@@ -23,9 +24,35 @@ export function CreateUser() {
             })
             return
         }
+        const createRequest: CreateRequest = {
+            username: username,
+            password: password,
+        }
+
+        try {
+            const newUser = await createNewClaimAccount(createRequest);
+
+            toast({
+                status: 'success',
+                description: 'Successfully created user ' + newUser.username,
+            })
+
+        } catch (e) {
+            if (e instanceof UnauthorizedError) {
+                navigate('/');
+                voidTokens()
+            }
+
+            toast({
+                status: 'error',
+                description: e.message,
+            })
+            return
+        }
 
 
     }
+
     return (
         <>
             <Flex
@@ -47,46 +74,11 @@ export function CreateUser() {
                     />
                 </FormControl>
                 <FormControl>
-                    <FormLabel>
-                        Password
-                    </FormLabel>
-                    <Flex>
-
-                        <Input
-                            placeholder={'Password'}
-                            type={showPassword ? 'text' : 'password'}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <IconButton
-                            icon={<BsEye/>}
-                            aria-label={""}
-                            onClick={() => {
-                                setShowPassword(!showPassword)
-                            }}
-                        />
-                    </Flex>
+                    <PasswordInput password={password} setPassword={setPassword}/>
                 </FormControl>
                 <FormControl>
-                    <FormLabel>
-                        Repeat Password
-                    </FormLabel>
-                    <Flex>
-
-                        <Input
-                            placeholder={'Repeat Password'}
-                            type={showRepeatPassword ? 'text' : 'password'}
-                            value={repeatPassword}
-                            onChange={(e) => setRepeatPassword(e.target.value)}
-                        />
-                        <IconButton
-                            icon={<BsEye/>}
-                            aria-label={""}
-                            onClick={() => {
-                                setShowRepeatPassword(!showRepeatPassword)
-                            }}
-                        />
-                    </Flex>
+                    <PasswordInput password={repeatPassword} setPassword={setRepeatPassword}
+                                   placeholder={'Repeat Password'} title={'Repeat Password'}/>
                 </FormControl>
                 <Button
                     onClick={handleSubmit}

@@ -22,6 +22,7 @@ import {useNavigate} from "react-router-dom";
 import {getAuthToken, voidTokens} from "../repo/Auth.ts";
 import {Loader} from "../components/ui/Loader.tsx";
 import {isValidPassword} from "../utility/password.ts";
+import {PasswordInput} from "../components/ui/PasswordInput.tsx";
 
 
 export function Claim() {
@@ -73,7 +74,6 @@ export function Claim() {
     }
 
 
-
     useEffect(() => {
         async function checkForClaimToken() {
 
@@ -112,12 +112,11 @@ export function Claim() {
         }
 
 
-
         checkForClaimToken();
     }, []);
 
     if (loading) {
-        return  <Loader />
+        return <Loader/>
     }
 
 
@@ -141,46 +140,12 @@ export function Claim() {
                     alignItems="center"
                 >
                     <FormControl>
-                        <FormLabel>
-                            Password
-                        </FormLabel>
-                        <Flex>
+                        <PasswordInput password={password} setPassword={setPassword}/>
 
-                            <Input
-                                placeholder={'Password'}
-                                type={showPassword ? 'text' : 'password'}
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                            <IconButton
-                                icon={<BsEye/>}
-                                aria-label={""}
-                                onClick={() => {
-                                    setShowPassword(!showPassword)
-                                }}
-                            />
-                        </Flex>
                     </FormControl>
                     <FormControl>
-                        <FormLabel>
-                            Repeat Password
-                        </FormLabel>
-                        <Flex>
-
-                            <Input
-                                placeholder={'Password'}
-                                type={showRepeatPassword ? 'text' : 'password'}
-                                value={repeatPassword}
-                                onChange={(e) => setRepeatPassword(e.target.value)}
-                            />
-                            <IconButton
-                                icon={<BsEye/>}
-                                aria-label={""}
-                                onClick={() => {
-                                    setShowRepeatPassword(!showRepeatPassword)
-                                }}
-                            />
-                        </Flex>
+                        <PasswordInput password={repeatPassword} setPassword={setRepeatPassword}
+                                       placeholder={'Repeat Password'} title={'Repeat Password'}/>
                     </FormControl>
                     <Flex gap={2}>
                         <Text>

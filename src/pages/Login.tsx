@@ -14,6 +14,7 @@ import {checkAuthentication, LoginRequest, loginToAccount} from "../repo/Login.t
 import {useNavigate} from "react-router-dom";
 import {voidTokens} from "../repo/Auth.ts";
 import {Loader} from "../components/ui/Loader.tsx";
+import {PasswordInput} from "../components/ui/PasswordInput.tsx";
 
 export function Login() {
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -24,6 +25,7 @@ export function Login() {
     const {colorMode} = useColorMode();
     const toast = useToast();
     const navigate = useNavigate();
+
 
     async function submitForm() {
 
@@ -109,25 +111,7 @@ export function Login() {
                         />
                     </FormControl>
                     <FormControl>
-                        <FormLabel>
-                            Password
-                        </FormLabel>
-                        <Flex>
-
-                            <Input
-                                placeholder={'Password'}
-                                type={showPassword ? 'text' : 'password'}
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                            <IconButton
-                                icon={<BsEye/>}
-                                aria-label={""}
-                                onClick={() => {
-                                    setShowPassword(!showPassword)
-                                }}
-                            />
-                        </Flex>
+                        <PasswordInput password={password} setPassword={setPassword} />
                     </FormControl>
                     <Flex gap={2}>
                         <Text>
