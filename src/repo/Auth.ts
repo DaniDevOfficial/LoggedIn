@@ -1,7 +1,6 @@
-import {LoginRequest, LoginResponse} from "./Login.ts";
-import {FiltersInterface, LogEntry} from "../pages/Logs.tsx";
 import {BadRequestError, InternalServerError, UnauthorizedError} from "../utility/Errors.ts";
 import {BAD_REQUEST, INTERNAL_SERVER_ERROR, UNAUTHORIZED} from "../utility/HttpResponseCodes.ts";
+import {handleDefaultResponseAndHeaders} from "./Response.ts";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 const apiUrl = import.meta.env.VITE_BACKEND_URL
@@ -37,65 +36,12 @@ export async function isCurrentUserAdmin(): Promise<boolean> {
             'Content-Type': 'application/json',
         },
     });
-    handleAuthorisationKeysFromHeader(response.headers);
+
+    handleDefaultResponseAndHeaders(response);
 
     const isAdmin: IsAdmin = await response.json();
 
-    if (!response.ok) {
-
-        if (response.status === UNAUTHORIZED) {
-            throw new UnauthorizedError('Not authorized');
-        }
-        if (response.status === BAD_REQUEST) {
-            throw new BadRequestError('Wrong data provided');
-        }
-
-        if (response.status === INTERNAL_SERVER_ERROR) {
-            throw new InternalServerError("Internal server error");
-        }
-
-        throw new Error('An unexpected error occurred');
-    }
     return isAdmin.isAdmin;
-}
-
-export async function createNewClaimAccount(createData: CreateRequest): Promise<CreateResponse> {
-    const url = apiUrl + 'auth/account';
-    const refreshToken = getRefreshToken();
-    const authToken = getAuthToken() ?? '';
-    if (!refreshToken) {
-        throw new UnauthorizedError('Not authorized');
-    }
-
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': authToken,
-            'RefreshToken': refreshToken,
-        },
-        body: JSON.stringify(createData)
-    });
-
-    const newUser: CreateResponse = await response.json();
-
-    if (!response.ok) {
-
-        if (response.status === UNAUTHORIZED) {
-            throw new UnauthorizedError('Not authorized');
-        }
-        if (response.status === BAD_REQUEST) {
-            throw new BadRequestError('Wrong data provided');
-        }
-
-        if (response.status === INTERNAL_SERVER_ERROR) {
-            throw new InternalServerError("Internal server error");
-        }
-
-        throw new Error('An unexpected error occurred');
-    }
-
-    return newUser;
 }
 
 export function handleAuthorisationKeysFromHeader(header: Headers) {
@@ -121,4 +67,24 @@ export function getRefreshToken() {
 
 export function getAuthToken() {
     return localStorage.getItem('Authorization');
+}
+
+export interface SimpleAuthHeaderWithJson extends Record<string, string> {
+    RefreshToken: string;
+    Authorization: string;
+    'Content-Type': string;
+}
+
+export function getBasicAuthHeader(): SimpleAuthHeaderWithJson {
+    const refreshToken = getRefreshToken();
+    const authToken = getAuthToken() ?? '';
+    if (!refreshToken) {
+        throw new UnauthorizedError('Not authorized');
+    }
+    return {
+        RefreshToken: refreshToken,
+        Authorization: authToken,
+        'Content-Type': 'application/json',
+    };
+
 }

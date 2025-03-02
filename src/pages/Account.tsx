@@ -5,11 +5,12 @@ import {useNavigate} from "react-router-dom";
 import {useToast} from "@chakra-ui/react";
 import {CreateUser} from "../components/Account/CreateUser.tsx";
 import {Loader} from "../components/ui/Loader.tsx";
+import {AccountList} from "../components/Account/AccountList.tsx";
 
 export function Account() {
     const [loading, setLoading] = useState<boolean>(true);
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
-    console.log(typeof setIsAdmin)
+
     const navigate = useNavigate();
     const toast = useToast();
 
@@ -47,6 +48,7 @@ export function Account() {
 
         <>
                 <CreateUser />
+                <AccountList />
         </>
     );
 }

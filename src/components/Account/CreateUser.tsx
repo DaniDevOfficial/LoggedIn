@@ -3,9 +3,10 @@ import {useState} from "react";
 import {BsEye} from "react-icons/bs";
 import {isValidPassword} from "../../utility/password.ts";
 import {useNavigate} from "react-router-dom";
-import {createNewClaimAccount, CreateRequest, voidTokens} from "../../repo/Auth.ts";
+import {CreateRequest, voidTokens} from "../../repo/Auth.ts";
 import {UnauthorizedError} from "../../utility/Errors.ts";
 import {PasswordInput} from "../ui/PasswordInput.tsx";
+import {createNewClaimAccount} from "../../repo/Account.ts";
 
 export function CreateUser() {
     const [username, setUsername] = useState<string>("");

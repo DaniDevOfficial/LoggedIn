@@ -1,6 +1,6 @@
-import {getAuthToken, getRefreshToken, handleAuthorisationKeysFromHeader, voidTokens} from "./Auth.ts";
-import {BadRequestError, DoNothingError, InternalServerError, UnauthorizedError} from "../utility/Errors.ts";
-import {BAD_REQUEST, INTERNAL_SERVER_ERROR, UNAUTHORIZED} from "../utility/HttpResponseCodes.ts";
+import {getAuthToken, getRefreshToken, voidTokens} from "./Auth.ts";
+import {DoNothingError} from "../utility/Errors.ts";
+import {handleDefaultResponseAndHeaders} from "./Response.ts";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
@@ -35,23 +35,10 @@ export async function loginToAccount(loginData: LoginRequest): Promise<LoginResp
         },
         body: JSON.stringify(loginData),
     });
-    const headers = Object.fromEntries(response.headers.entries());
-    console.log("All Headers:", headers);
 
-    console.log(response.headers.get('Authorization'));
-    handleAuthorisationKeysFromHeader(response.headers)
-
+    handleDefaultResponseAndHeaders(response);
 
     const data: unknown = await response.json();
-
-
-    if (!response.ok) {
-        if (isErrorResponse(data)) {
-            throw new Error(data.message);
-        } else {
-            throw new Error('An unknown error occurred');
-        }
-    }
 
     return data as LoginResponse;
 
@@ -79,19 +66,9 @@ export async function claimAccount(claimData: ClaimRequest): Promise<LoginRespon
         body: JSON.stringify(claimData),
     });
 
-    handleAuthorisationKeysFromHeader(response.headers)
+    handleDefaultResponseAndHeaders(response);
 
-    const data: unknown = await response.json();
-
-    if (!response.ok) {
-        if (isErrorResponse(data)) {
-            throw new Error(data.message);
-        } else {
-            throw new Error('An unknown error occurred');
-        }
-    }
-
-    return data as LoginResponse;
+    return await response.json();
 }
 
 export async function checkIfIsClaimToken(token: string) {
@@ -130,22 +107,8 @@ export async function checkAuthentication() {
             'Content-Type': 'application/json',
         },
     });
-    handleAuthorisationKeysFromHeader(response.headers);
 
-    if (!response.ok) {
-        voidTokens()
-        if (response.status === UNAUTHORIZED) {
-            throw new UnauthorizedError('Not authorized');
-        }
-        if (response.status === BAD_REQUEST) {
-            throw new BadRequestError('Wrong data provided');
-        }
-        if (response.status === INTERNAL_SERVER_ERROR) {
-            throw new InternalServerError("Internal server error");
-        }
-
-        throw new Error('An unexpected error occurred');
-    }
+    handleDefaultResponseAndHeaders(response);
 
 }
 
