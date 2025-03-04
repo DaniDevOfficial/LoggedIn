@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 import {useToast} from "@chakra-ui/react";
 import {CreateUser} from "../components/Account/CreateUser.tsx";
 import {Loader} from "../components/ui/Loader.tsx";
-import {AccountList} from "../components/Account/AccountList.tsx";
+import {AccountDrawer} from "../components/Account/AccountDrawer.tsx";
 
 export function Account() {
     const [loading, setLoading] = useState<boolean>(true);
@@ -48,7 +48,7 @@ export function Account() {
 
         <>
                 <CreateUser />
-                <AccountList />
+                <AccountDrawer />
         </>
     );
 }

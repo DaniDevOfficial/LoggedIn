@@ -30,6 +30,7 @@ export async function createNewClaimAccount(createData: CreateRequest): Promise<
 
 
 export interface Account {
+    id: string;
     username: string;
     isAdmin: boolean;
     isClaimed: boolean;
@@ -48,6 +49,4 @@ export async function getAllAccounts(): Promise<Account[]> {
     handleDefaultResponseAndHeaders(response);
 
     return await response.json();
-
-
 }
