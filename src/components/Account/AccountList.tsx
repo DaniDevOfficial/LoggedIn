@@ -1,7 +1,7 @@
 import {Account} from "../../repo/Account.ts";
 import {AccountCard} from "./AccountCard.tsx";
 
-export function AccountList({accounts}: { accounts: Account[] }) {
+export function AccountList({accounts, onClose}: { accounts: Account[], onClose?: () => void }) {
 
     if (accounts.length === 0) {
         return (
@@ -14,7 +14,7 @@ export function AccountList({accounts}: { accounts: Account[] }) {
     return (
         <>
             {accounts.map(account => (
-                <AccountCard key={account.id} account={account} />
+                <AccountCard key={account.id} account={account} conClose={onClose} />
             ))}
         </>
     );

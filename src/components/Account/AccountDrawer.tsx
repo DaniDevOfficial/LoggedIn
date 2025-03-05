@@ -76,7 +76,7 @@ export function AccountDrawer() {
                             {loading ? (
                                 <Spinner/>
                             ) : (
-                                <AccountList accounts={accounts}/>
+                                <AccountList accounts={accounts} onClose={onClose}/>
                             )}
                         </Flex>
                     </DrawerBody>

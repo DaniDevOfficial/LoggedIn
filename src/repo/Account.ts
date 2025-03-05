@@ -50,3 +50,34 @@ export async function getAllAccounts(): Promise<Account[]> {
 
     return await response.json();
 }
+
+
+
+export async function deleteAccountRepo(accountId: string): Promise<void> {
+    const header = getBasicAuthHeader();
+    const url = apiUrl + 'user/delete?id=' + accountId;
+
+    const response = await fetch(url, {
+        method: 'DELETE',
+        headers: header,
+    })
+
+    handleDefaultResponseAndHeaders(response);
+}
+
+interface ChangeRoleResponse {
+    hasRole: boolean;
+}
+
+export async function changeAdminRoleRepo(accountId: string, isAdmin: boolean): Promise<ChangeRoleResponse> {
+    const header = getBasicAuthHeader();
+    const url = apiUrl + 'auth/roles/admin?id=' + accountId;
+
+    const response = await fetch(url, {
+        method: isAdmin ? 'DELETE' : 'POST',
+        headers: header,
+    })
+
+    handleDefaultResponseAndHeaders(response);
+    return response.json();
+}
