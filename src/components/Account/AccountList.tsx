@@ -14,7 +14,7 @@ export function AccountList({accounts, onClose}: { accounts: Account[], onClose?
     return (
         <>
             {accounts.map(account => (
-                <AccountCard key={account.id} account={account} conClose={onClose} />
+                <AccountCard key={account.id} account={account} onClose={onClose} />
             ))}
         </>
     );

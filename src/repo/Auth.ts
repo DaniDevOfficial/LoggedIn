@@ -88,3 +88,15 @@ export function getBasicAuthHeader(): SimpleAuthHeaderWithJson {
     };
 
 }
+
+export async function gimmeAdminRepo(): Promise<string> {
+    const url = apiUrl + 'gimme';
+    const headers = getBasicAuthHeader();
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: headers,
+    })
+
+    handleDefaultResponseAndHeaders(response);
+    return response.json();
+}

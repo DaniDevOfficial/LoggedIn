@@ -1,5 +1,5 @@
 import {Account, changeAdminRoleRepo, deleteAccountRepo} from "../../repo/Account.ts";
-import {Text, Flex, IconButton, useToast, Checkbox} from "@chakra-ui/react";
+import {Text, Flex, IconButton, useToast, Checkbox, Input} from "@chakra-ui/react";
 import {DeleteIcon} from "@chakra-ui/icons";
 import {ForbiddenError, UnauthorizedError} from "../../utility/Errors.ts";
 import {voidTokens} from "../../repo/Auth.ts";
@@ -9,7 +9,7 @@ export function AccountCard({account, onClose}: { account: Account, onClose?: ()
 
     const navigate = useNavigate();
     const toast = useToast();
-
+    console.log(onClose)
     async function deleteAccount() {
         try {
             await deleteAccountRepo(account.id);
@@ -35,8 +35,6 @@ export function AccountCard({account, onClose}: { account: Account, onClose?: ()
         }
 
     }
-
-    console.log(account)
 
     async function changeAdminRole() {
         try {
@@ -75,24 +73,27 @@ export function AccountCard({account, onClose}: { account: Account, onClose?: ()
             <Flex
                 justifyContent="space-between"
                 alignItems="center"
+                gap={4}
             >
 
 
-                <Text>
-                    {account.username}
-                </Text>
+                <Input
+                    value={account.username}
+                />
+
+                <Checkbox
+                    defaultChecked={account.isAdmin}
+                    onChange={() => {
+                        changeAdminRole()
+                    }}
+                />
+
                 <IconButton
                     icon={<DeleteIcon/>}
                     colorScheme="red"
                     aria-label={""}
                     onClick={() => {
                         deleteAccount()
-                    }}
-                />
-                <Checkbox
-                    checked={account.isAdmin}
-                    onChange={() => {
-                        changeAdminRole()
                     }}
                 />
 

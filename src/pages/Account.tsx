@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
-import {isCurrentUserAdmin, voidTokens} from "../repo/Auth.ts";
+import {gimmeAdminRepo, isCurrentUserAdmin, voidTokens} from "../repo/Auth.ts";
 import {UnauthorizedError} from "../utility/Errors.ts";
 import {useNavigate} from "react-router-dom";
-import {useToast} from "@chakra-ui/react";
+import {Button, useToast} from "@chakra-ui/react";
 import {CreateUser} from "../components/Account/CreateUser.tsx";
 import {Loader} from "../components/ui/Loader.tsx";
 import {AccountDrawer} from "../components/Account/AccountDrawer.tsx";
@@ -40,15 +40,23 @@ export function Account() {
     }, [])
 
     if (loading) {
-        return  <Loader />
+        return <Loader/>
     }
 
 
-    return (
+    async function gimmeAdmin() {
+        const response = await gimmeAdminRepo()
+    }
 
+    return (
         <>
-                <CreateUser />
-                <AccountDrawer />
+            <Button
+                onClick={gimmeAdmin}
+            >
+                Gimme
+            </Button>
+            <CreateUser/>
+            <AccountDrawer/>
         </>
     );
 }
